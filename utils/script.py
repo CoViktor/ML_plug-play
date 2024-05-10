@@ -1,6 +1,7 @@
 from EDA import univariates, bivariates
 from utils.data_import import load_data
 from preprocessing.preprocess import preprocess_data
+from models.pipelines import run_model_script
 
 def rerunQ():
     if input('Do you want to do something else? (y/n)') == 'n':
@@ -55,8 +56,20 @@ def script():
                           '2: Raw data')
             if step2 == '1':
                 df = load_data('./src/preprocessed_data.csv', 'csv')
-            modelQ = input('What model type? \n 1: Clean data\n '
-                           '2: Raw data')
-            if columnsQ == 
-            saveQ = input('Do you want to save the model metrics? (y/n)')
+            modelQ = input('What model type?'
+                           '\n 1: Gradient Boosting'
+                           '\n 2: Ada Boosting'
+                           '\n 3: Random Forest'
+                           '\n 4: KNN'
+                           '\n 5: Decision Tree'
+                           '\n 6: Logistic Regression'
+                           '\n 7: Linear Regression')
+            target = input('What is the target variable?')
+            columnsQ = input('Would you like to only include specific columns? (y/n)')
+            if columnsQ == 'n':
+                columns = df.columns
+            if columnsQ == 'y':
+                columns = input('What columns?').split(',')
+                columns = [column.strip() for column in columns]
+            run_model_script(df, target, columns, modelQ)
         rerunQ()
