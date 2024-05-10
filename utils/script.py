@@ -49,21 +49,32 @@ def script():
 
         elif step1 == '3':
             print('exploring cleaned data')
-            explore_script(load_data('./src/preprocessed_data.csv', 'csv')):
+            explore_script(load_data('./src/preprocessed_data.csv', 'csv'))
 
         elif step1 == '4':
             step2 = input('What data? \n 1: Clean data\n '
                           '2: Raw data')
             if step2 == '1':
                 df = load_data('./src/preprocessed_data.csv', 'csv')
-            modelQ = input('What model type?'
-                           '\n 1: Gradient Boosting'
-                           '\n 2: Ada Boosting'
-                           '\n 3: Random Forest'
-                           '\n 4: KNN'
-                           '\n 5: Decision Tree'
-                           '\n 6: Logistic Regression'
-                           '\n 7: Linear Regression')
+            targetQ = input('Is the target variable categorical? (y/n)')
+            if targetQ == 'y':
+                modelQ = input('What model type?'
+                               '\n 1: Gradient Boosting'
+                               '\n 2: Ada Boosting'
+                               '\n 3: Random Forest'
+                               '\n 4: KNN'
+                               '\n 5: Decision Tree'
+                               '\n 6: Logistic Regression'
+                               )
+            elif targetQ == 'n':
+                modelQ = input('What model type?'
+                               '\n 7: Linear Regression'
+                               '\n 8: Ridge'
+                               '\n 9: Lasso'
+                               '\n 10: ElasticNet'
+                               '\n 11: Support Vector'
+                               '\n 12: Decision Tree'
+                               '\n 13: Random Forest')
             target = input('What is the target variable?')
             columnsQ = input('Would you like to only include specific columns? (y/n)')
             if columnsQ == 'n':
