@@ -4,7 +4,7 @@ from plotly.subplots import make_subplots
 import plotly.express as px
 
 
-def explore_df(df):
+def explore_df(df, columns=None):
     """
     Print the head, columns, count of null values,
     and count of unique values for each categorical column in the DataFrame.
@@ -15,6 +15,8 @@ def explore_df(df):
     Returns:
         None
     """
+    if colums is None:
+        columns= df.columns
     print('first lines:')
     print(df.head())
     print('columns:')
@@ -25,24 +27,23 @@ def explore_df(df):
     for col in df.select_dtypes(include=['object']).columns:
         print(f"{col}:")
         print(df[col].value_counts())
-    for column in df.columns:
-        if column in ['Price', 'ConstructionYear','BedroomCount', 'LivingArea', 'TerraceArea', 'GardenArea', 'Facades', 'EnergyConsumptionPerSqm']:
-            print(f'--{column}--')
-            # setting IQR
-            df[column].dropna()
-            Q1 = df[column].quantile(0.25)
-            Q3 = df[column].quantile(0.75)
-            IQR = Q3 - Q1
-            # identify outliers
-            threshold = 1.5
-            outliers = df[(df[column] < Q1 - threshold * IQR) | (df[column] > Q3 + threshold * IQR)]
-            lower = df[ df[column] < Q1 - threshold * IQR)]
-            upper = df[ df[column] > Q3 + threshold * IQR)]
-            print(len(outliers), f'outliers \nLower: {len(lower)} ( {lower.max()} - {lower.min()} )\nUpper: {len(upper)} ( {upper.min()} - {upper.max()} )')
+    for column in df.select_dtypes(exclude=['object']).columns:
+        print(f'--{column}--')
+        # setting IQR
+        df[column].dropna()
+        Q1 = df[column].quantile(0.25)
+        Q3 = df[column].quantile(0.75)
+        IQR = Q3 - Q1
+        # identify outliers
+        threshold = 1.5
+        outliers = df[(df[column] < Q1 - threshold * IQR) | (df[column] > Q3 + threshold * IQR)]
+        lower = df[ df[column] < Q1 - threshold * IQR)]
+        upper = df[ df[column] > Q3 + threshold * IQR)]
+        print(len(outliers), f'outliers \nLower: {len(lower)} ( {lower.max()} - {lower.min()} )\nUpper: {len(upper)} ( {upper.min()} - {upper.max()} )')
 
 
 
-def plot_numerical_data(df):
+def plot_numerical_data(df, columns=None):
     """
     Plot interactive histograms and boxplots for numerical columns in the DataFrame.
 
@@ -52,6 +53,8 @@ def plot_numerical_data(df):
     Returns:
         None
     """
+    if colums is None:
+        columns= df.columns
     # Filter only numerical columns
     numerical_df = df.select_dtypes(include=['float64', 'int64'])
 
@@ -81,7 +84,7 @@ def plot_numerical_data(df):
     fig.show()
 
 
-def plot_categorical_data(df):
+def plot_categorical_data(df, columns=None):
     """
     Plot interactive count plots for categorical columns in the DataFrame.
 
@@ -91,6 +94,8 @@ def plot_categorical_data(df):
     Returns:
         None
     """
+    if colums is None:
+        columns= df.columns
     # Filter only categorical columns
     categorical_df = df.select_dtypes(include=['object', 'category'])
 
@@ -106,7 +111,7 @@ def plot_categorical_data(df):
         fig.show()
 
 
-def plot_distributions(df):
+def plot_distributions(df, colums=None):
     """
     Plot distributions of both numerical and categorical data in the DataFrame.
 
@@ -116,5 +121,7 @@ def plot_distributions(df):
     Returns:
         None
     """
-    plot_numerical_data(df)
-    plot_categorical_data(df)
+    if colums is None:
+        columns= df.columns
+    plot_numerical_data(df, columns)
+    plot_categorical_data(df, columns)

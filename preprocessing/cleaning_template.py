@@ -22,3 +22,10 @@ def string_to_int(df, list: list):
     """converts colums in the list from string to int64"""
     columns_to_int64 = list
     df[columns_to_int64] = df[columns_to_int64].astype(float).round().astype('Int64')
+    return df
+
+def string_to_float(df, list: list):
+    """converts colums in the list from string to float"""
+    columns_to_int64 = list
+    df[columns_to_int64] = df[columns_to_int64].astype(float)
+    return df
