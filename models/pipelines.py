@@ -86,9 +86,3 @@ def run_model_script(df, y, columns, modeltype):
         save_model(model, modeltype)
     rerunQ()
 
-
-    # save metrics in csv with modeltype timestamped, see bear
-    # save optimal parameters in csv with modeltype timestamped
-    # -> or instead: ask to rerun model with best params?
-    # if visualsQ == 'y': add visuals of eg ROC curve, confusion matrix, feature importance
-    # make script that compares the models visually, over time, like bear
