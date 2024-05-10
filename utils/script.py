@@ -1,6 +1,6 @@
 from EDA import univariates, bivariates
 from utils.data_import import load_data
-from preprocessing.preprocess import preprocess
+from preprocessing.preprocess import preprocess_data
 
 def rerunQ():
     if input('Do you want to do something else? (y/n)') == 'n':
@@ -18,6 +18,7 @@ def explore_script(df):
         columns = df.columns
     if columnsQ == 'y':
         columns = input('What columns?').split(',')
+        columns = [column.strip() for column in columns]
     if step2 == '1':
         univariates.explore_df(df, columns)
     elif step2 == '2':
@@ -42,10 +43,12 @@ def script():
             explore_script(df)
 
         elif step1 == '2':
-            preprocess(df)
+            preprocess_data(df)
             rerunQ()
+
         elif step1 == '3':
-            explore_script(load_data('./src/preprocessed_data.csv', 'csv'))
+            print('exploring cleaned data')
+            explore_script(load_data('./src/preprocessed_data.csv', 'csv')):
 
         elif step1 == '4':
             step2 = input('What data? \n 1: Clean data\n '
