@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def prepare_model_data(cleaned_data_file):
     # Load cleaned data
     cleaned_data = pd.read_csv(cleaned_data_file)
@@ -23,6 +26,7 @@ def string_to_int(df, list: list):
     columns_to_int64 = list
     df[columns_to_int64] = df[columns_to_int64].astype(float).round().astype('Int64')
     return df
+
 
 def string_to_float(df, list: list):
     """converts colums in the list from string to float"""

@@ -43,66 +43,36 @@ def explore_df(df, columns=None):
 
 
 
-def plot_numerical_data(df, columns=None):
-    """
-    Plot interactive histograms and boxplots for numerical columns in the DataFrame.
+import plotly.express as px
 
-    Parameters:
-        df (pandas.DataFrame): The DataFrame containing numerical data to be plotted.
+def plot_numerical_data(data, columns):
+    fig = px.layout.Grid(rows=1, columns=16, width=500, height=400)
 
-    Returns:
-        None
-    """
-    if colums is None:
-        columns= df.columns
-    # Filter only numerical columns
-    numerical_df = df.select_dtypes(include=['float64', 'int64'])
+    for column in columns:
+        if df[column].dtype in ['int64', 'float64']:
+            hist_data = px.data.gapminder().query("year == 2007")
+            fig.add_trace(
+                px.histogram(hist_data, x=column, color=hist_data.continent, barmode='overlay', title=f"{column}: Skewness: {data[column].skew():.2f}"),
+                row=1, col=(i % 16) + 1
+            )
 
-    num_variables = len(numerical_df.columns)
-    # Initialize the figure with a grid of subplots
-    titles = [
-        f"{col}<br><sup>Skewness: {numerical_df[col].skew():.2f}</sup>" for col in numerical_df.columns
-        for _ in range(2)  # Repeat for histogram and boxplot
-        ]
+    fig.update_layout(
+        title_text="Interactive Histograms with Skewness Information",
+        height=400 * 16,
+        width=500 * 16,
+        grid_gap=0
+    )
 
-    fig = make_subplots(rows=1, cols=num_variables*2, subplot_titles=titles)
-
-    for i, column in enumerate(numerical_df.columns):
-        # Add histogram in the odd columns
-        fig.add_trace(go.Histogram(x=numerical_df[column], name=f'{column} Histogram',
-                                   marker_color='skyblue', opacity=0.75, nbinsx=20),
-                      row=1, col=2*i+1)
-        
-        # Add boxplot in the even columns
-        fig.add_trace(go.Box(y=numerical_df[column], name=f'{column} Boxplot',
-                             marker_color='blue'),
-                      row=1, col=2*i+2)
-
-    # Update layout for better spacing and to show legend
-    fig.update_layout(height=600, width=400 * num_variables,  # Adjust width for better fit
-                      title_text="Interactive Histograms and Boxplots", showlegend=True)
     fig.show()
 
 
-def plot_categorical_data(df, columns=None):
-    """
-    Plot interactive count plots for categorical columns in the DataFrame.
-
-    Parameters:
-        df (pandas.DataFrame): The DataFrame containing categorical data to be plotted.
-
-    Returns:
-        None
-    """
-    if colums is None:
-        columns= df.columns
+def plot_categorical_data(df, columns):
     # Filter only categorical columns
-    categorical_df = df.select_dtypes(include=['object', 'category'])
-
-    for column in categorical_df.columns:
-        # Calculate value counts and reset index with clear column names
-        counts = categorical_df[column].value_counts().reset_index()
-        counts.columns = ['Category', 'Count']  # Rename columns for clarity
+    for column in columns:
+        if df[column].dtype in ['object', 'category']:
+            # Calculate value counts and reset index with clear column names
+            counts = df[column].value_counts().reset_index()
+            counts.columns = ['Category', 'Count']
 
         # Generate the bar plot
         fig = px.bar(counts, x='Category', y='Count',
@@ -111,7 +81,7 @@ def plot_categorical_data(df, columns=None):
         fig.show()
 
 
-def plot_distributions(df, colums=None):
+def plot_distributions(df, columns):
     """
     Plot distributions of both numerical and categorical data in the DataFrame.
 
@@ -121,7 +91,5 @@ def plot_distributions(df, colums=None):
     Returns:
         None
     """
-    if colums is None:
-        columns= df.columns
     plot_numerical_data(df, columns)
     plot_categorical_data(df, columns)

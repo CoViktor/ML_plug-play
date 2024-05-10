@@ -12,18 +12,19 @@ def rerunQ():
 def explore_script(df):
     step2 = input('What do you want to do? \n 1: Explore univariates\n '
                   '2: Explore bivariates\n 3: Both')
+    target = input('What is the target variable?')
     columnsQ = input('Would you like to explore specific columns? (y/n)')
     if columnsQ == 'n':
-        columns = None
+        columns = df.columns
     if columnsQ == 'y':
         columns = input('What columns?').split(',')
     if step2 == '1':
         univariates.explore_df(df, columns)
     elif step2 == '2':
-        bivariates.explore_df(df, columns)
+        bivariates.explore_df(df, target, columns)
     elif step2 == '3':
-        univariates.explore_df(df, columns)
-        bivariates.explore_df(df, columns)
+        univariates.explore_df(df, target, columns)
+        bivariates.explore_df(df, target, columns)
     rerunQ()
 
 def script():
