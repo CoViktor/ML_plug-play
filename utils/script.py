@@ -31,7 +31,7 @@ def explore_script(df):
 
 def script():
     source = input('Give filepath')
-    filetype = input('Give filetype \n csv \n excel \n JSON \n parquet \n' 
+    filetype = input('Give filetype \n csv \n excel \n JSON \n pkl \n parquet \n'
                      ' csv_with_delimiter \n csv_with_semicolon')
     df = load_data(source, filetype)
     loop = True
