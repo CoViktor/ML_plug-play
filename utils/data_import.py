@@ -19,6 +19,8 @@ def load_data(filepath, type):
             df = json.load(f)
     elif type == 'excel':
         df = pd.read_excel(filepath)
+    elif type == 'pkl':
+        df = pd.read_pickle(filepath)
     elif type == 'csv_with_delimiter':
         df = pd.read_csv(filepath, delimiter=',')
     elif type == 'csv_with_semicolon':
